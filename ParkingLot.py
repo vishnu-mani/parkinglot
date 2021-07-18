@@ -3,16 +3,20 @@ class ParkingLot:
         self.totalSlots = 0
         self.totalOccupiedSlots = 0
 
+    # Create a parking lot
     def createParkingSlots(self, totalSlots):
-        self.totalSlots = totalSlots
-        self.slots = [-1] * totalSlots
+        if totalSlots > 0:
+            self.totalSlots = totalSlots
+            self.slots = [-1] * totalSlots
         return totalSlots
 
+    # Get the next available slot to park a car
     def getNextSlot(self):
         for i in range(self.totalSlots):
             if self.slots[i] == -1:
                 return i
-    
+
+    # Park a car in the next available slot
     def park(self, regNo, age):
         if self.totalOccupiedSlots < self.totalSlots:
             nextSlot = self.getNextSlot()
@@ -25,16 +29,17 @@ class ParkingLot:
         else:
             return -1
     
+    # Get parking slots according to the driver's age
     def getSlotsFromDriverAge(self, age):
         slotNos = []
         for i in range(self.totalSlots):
             if self.slots[i] == -1:
                 continue
-
             if self.slots[i]['age'] == age:
                 slotNos.append(str(i+1))
         return slotNos
     
+    # Get parking slot according to the vehicle register number
     def getSlotFromRegNo(self, regNo):
         for i in range(self.totalSlots):
             if self.slots[i] == -1:
@@ -44,6 +49,7 @@ class ParkingLot:
                 return i+1
         return -1
 
+    # Get vehicle register numbers according to the driver's age
     def getRegNosFromDriverAge(self, age):
         regNos = []
         for slot in self.slots:
@@ -53,6 +59,7 @@ class ParkingLot:
                 regNos.append(slot['regNo'])
         return regNos
 
+    # Leave a car from the parking lot
     def leave(self, slot):
         vehicle = {}
         if self.slots[slot-1] != -1:
@@ -65,9 +72,9 @@ class ParkingLot:
     def parking(self, command):
         if command.startswith('Create_parking_lot'):
             totalSlots = int(command.split(' ')[1])
-            if totalSlots > 0:
-                res = self.createParkingSlots(totalSlots)
-                print('Created parking of '+str(res)+' slots')
+            res = self.createParkingSlots(totalSlots)
+            if res > 0:
+                print('Created parking of '+str(res)+' slot(s)')
             else:
                 print('No parking lot found')
                 exit(0)
@@ -109,18 +116,19 @@ class ParkingLot:
             slotNo = int(command.split(' ')[1])
             if slotNo > self.totalSlots:
                 print('Invalid slot')
-                return
-            vehicle = self.leave(slotNo)
-            if 'regNo' in vehicle:
-                print('Slot number ' + str(slotNo) + ' vacated, the car with vehicle registration number "'+vehicle['regNo']+'" left the space, the driver of the car was of age '+vehicle['age'])
             else:
-                print('No parked car in slot ' + str(slotNo))
+                vehicle = self.leave(slotNo)
+                if 'regNo' in vehicle:
+                    print('Slot number ' + str(slotNo) + ' vacated, the car with vehicle registration number "'+vehicle['regNo']+'" left the space, the driver of the car was of age '+vehicle['age'])
+                else:
+                    print('No parked car in slot ' + str(slotNo))
         
         else:
             print("Invalid command")
             
-def main(filePath):
-    filePath = 'test_input.txt'
+def main():
+    filePath = 'input.txt' # Provided test cases
+    # filePath = 'test_input.txt' # Manual test cases with edge cases 
     parkinglot = ParkingLot()
     with open(filePath) as inputFile:
         for command in inputFile:
@@ -128,4 +136,4 @@ def main(filePath):
             parkinglot.parking(command)
 
 if __name__ == '__main__':
-    main('input.txt')
+    main()

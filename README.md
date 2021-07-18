@@ -2,6 +2,8 @@
 
 Program for parking vehicles in the given available slots with an automated ticketing system
 
+## Dependencies
+You just need Python or Python3 to run this code. Visit the link [https://www.python.org/downloads/](https://www.python.org/downloads/) to download/install Python or follow the instructions below
 ## Installation
 Installing Python 3 on Linux
 ```bash
